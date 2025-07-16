@@ -8,7 +8,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: jenkins
-  namespace: webapps
+  namespace: prod
 ```
 
 
@@ -18,7 +18,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: jenkins-role
-  namespace: webapps
+  namespace: prod
 rules:
   # Permissions for core API resources
   - apiGroups: [""]
@@ -58,7 +58,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: jenkins-rolebinding
-  namespace: webapps
+  namespace: prod
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -66,7 +66,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: jenkins
-    namespace: webapps
+    namespace: prod
 ```
 
 
@@ -109,7 +109,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: jenkins
-    namespace: webapps
+    namespace: prod
 ```
 
 
@@ -117,7 +117,7 @@ subjects:
 ### **Explanation of Permissions**
 
 1. **ServiceAccount**:  
-   - The `jenkins` ServiceAccount is created in the `webapps` namespace.
+   - The `jenkins` ServiceAccount is created in the `prod` namespace.
 
 2. **Role**:
    - Grants access to namespace-specific resources:
@@ -125,7 +125,7 @@ subjects:
      - **Deployments** and **ReplicaSets** under the `apps` API group.
 
 3. **RoleBinding**:
-   - Binds the `jenkins` Role to the ServiceAccount in the `webapps` namespace.
+   - Binds the `jenkins` Role to the ServiceAccount in the `prod` namespace.
 
 4. **ClusterRole**:
    - Grants access to cluster-wide resources:
@@ -156,9 +156,9 @@ subjects:
 
 3. Verify the ServiceAccount has the expected permissions:
    ```bash
-   kubectl auth can-i create secrets --as=system:serviceaccount:webapps:jenkins -n webapps
-   kubectl auth can-i create storageclasses --as=system:serviceaccount:webapps:jenkins
-   kubectl auth can-i create persistentvolumes --as=system:serviceaccount:webapps:jenkins
+   kubectl auth can-i create secrets --as=system:serviceaccount:prod:jenkins -n prod
+   kubectl auth can-i create storageclasses --as=system:serviceaccount:prod:jenkins
+   kubectl auth can-i create persistentvolumes --as=system:serviceaccount:prod:jenkins
    ```
 
 ### Generate token using service account in the namespace
